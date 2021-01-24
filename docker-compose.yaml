@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  rabbit:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+  api:
+    build: app/
+    command: uvicorn remote_coding_compilation_engine.main:app --host 0.0.0.0 --reload
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+
+  worker:
+    build: worker/
+    command: celery --app=worker.celery_app worker -c 2 --loglevel=INFO
+    volumes:
+      - ./worker:/worker
+    depends_on:
+      - api
+      - rabbit
+
+  flower:
+    image: mher/flower
+    command: ["flower", "--broker=pyamqp://guest@rabbit//", "--port=8888"]
+    ports:
+      - "8888:8888"
+    depends_on:
+      - api
+      - rabbit
+      - worker
