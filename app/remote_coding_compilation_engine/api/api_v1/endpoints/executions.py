@@ -1,20 +1,24 @@
-from fastapi import APIRouter
-from celery import Celery
+
+from fastapi import APIRouter, HTTPException
+from fastapi.logger import logger
 
 from remote_coding_compilation_engine import schemas
+from remote_coding_compilation_engine.celery.celery_client import celery_client
 
 router = APIRouter()
-
-celery_app = Celery('code-executions-tasks', broker='pyamqp://guest@rabbit//', backend='amqp://guest@rabbit//')
 
 
 @router.post("/", response_model=schemas.ExecutionResult)
 def create_executions(execution: schemas.Execution):
-    result = celery_app.send_task('worker.add', args=(1, 2)).wait(timeout=None, interval=0.1)
-    return {
-        "has_error": False,
-        "out_of_resources": False,
-        "exit_code": result,
-        "out_of_time": False,
-        "raw_output": ""
-    }
+
+    try:
+        logger.debug(f"Start code execution request with payload: {execution}")
+
+        result = celery_client.send_task('worker.execute_code', args=(
+            execution.language, execution.code, execution.timeout)).wait(timeout=None, interval=0.1)
+
+        logger.debug(f"Code execution succeeded with result: {result}")
+        return result
+    except Exception as exc:
+        logger.error(f"Worker could not execute code, error {exc}, payload: {execution}")
+        raise HTTPException(status_code=500, detail="The server could not process the code execution")

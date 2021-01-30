@@ -1,9 +1,11 @@
+from typing import Optional
 from pydantic import BaseModel
 
 
 class Execution(BaseModel):
     language: str
     code: str
+    timeout: Optional[float]
 
 
 class ExecutionResult(BaseModel):
