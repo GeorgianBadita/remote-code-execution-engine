@@ -3,7 +3,10 @@ from remote_coding_compilation_engine import schemas
 from fastapi.testclient import TestClient
 
 
-def test_execution_working(client: TestClient, execution: schemas.Execution, mocker, mock_send_task_no_error):
+def test_WHEN_execution_working_THEN_return(client: TestClient,
+                                            execution: schemas.Execution,
+                                            mocker,
+                                            mock_send_task_no_error):
     """
     Function for testing the execution post call when the call is done correctly
     """
@@ -18,7 +21,10 @@ def test_execution_working(client: TestClient, execution: schemas.Execution, moc
     assert "Hello World" in res.text
 
 
-def test_execution_raise(client: TestClient, execution: schemas.Execution, mocker, mock_send_task_raise):
+def testWHEN_execution_fails_THEN_raise(client: TestClient,
+                                        execution: schemas.Execution,
+                                        mocker,
+                                        mock_send_task_raise):
     """
     Function for testing the execution post call when the celery worker cannot process the execution
     """

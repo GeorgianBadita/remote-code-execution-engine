@@ -11,3 +11,5 @@ watchdog
 argh
 gtp
 sgf
+boto3
+pytest-mock

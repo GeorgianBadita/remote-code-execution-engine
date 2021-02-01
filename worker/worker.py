@@ -25,7 +25,7 @@ logger = get_logger(__name__)
 
 
 @celery_app.task
-def execute_code(language: str, code: str, timeout: Optional[float] = 10) -> str:
+def execute_code(language: str, code: str, timeout: Optional[float] = 10) -> dict:
     """
     Task for code execution
 
@@ -75,3 +75,8 @@ def execute_code(language: str, code: str, timeout: Optional[float] = 10) -> str
         default_dict["raw_output"] = "Time Limit Exceeded"
 
     return default_dict
+
+
+@celery_app.task
+def evaluate_submission(language: str, code: str, s3_test_code_uri: str) -> dict:
+    pass
