@@ -5,21 +5,16 @@ import os
 
 logging.basicConfig(level=logging.DEBUG)
 
+supported_langs = {
+    "python": {"cmd": "python", "extension": "py"},
+    "cpp": {"cmd": "/usr/bin/g++", "extension": "cpp"}
+}
+
 
 class CodeExcution:
 
-    __exec_cmds = {
-        "python": "python",
-        "cpp": "/usr/bin/g++"
-    }
-
-    __lang_extensions = {
-        "python": "py",
-        "cpp": "cpp"
-    }
-
-    @classmethod
-    def get_lang_extension(cls, language: str) -> str:
+    @staticmethod
+    def get_lang_extension(language: str) -> str:
         """
         Function which provides the language file extension
 
@@ -30,13 +25,13 @@ class CodeExcution:
         """
 
         try:
-            return cls.__lang_extensions[language]
+            return supported_langs[language]["extension"]
         except KeyError as err:
             logging.debug(f"{language} not found in supported extensions")
             raise err
 
-    @classmethod
-    def provide_code_execution_command(cls, in_file_path: str, language: str, compiled_file_path: str) -> str:
+    @staticmethod
+    def provide_code_execution_command(in_file_path: str, language: str, compiled_file_path: str) -> str:
         """
         Function which provides the bash command which needs to be run in order
         to execute the code
@@ -52,9 +47,9 @@ class CodeExcution:
         try:
             logging.info(f"Started creating code exec command for {language}, and file: {in_file_path}")
             if language == "python":
-                return f'{cls.__exec_cmds[language]} {in_file_path}'
+                return f'{supported_langs[language]["cmd"]} {in_file_path}'
             elif language == "cpp":
-                return (f"{cls.__exec_cmds[language]} -o {compiled_file_path} {in_file_path}"
+                return (f"{supported_langs[language]['cmd']} -o {compiled_file_path} {in_file_path}"
                         f" && ./{'/'.join(compiled_file_path.split('/')[2:])}")
             else:
                 raise KeyError("Language key not found")
@@ -64,8 +59,8 @@ class CodeExcution:
             )
             raise err
 
-    @classmethod
-    def execute_code(cls, command: str,
+    @staticmethod
+    def execute_code(command: str,
                      in_file_path: str,
                      compiled_file_path: str,
                      code: str,

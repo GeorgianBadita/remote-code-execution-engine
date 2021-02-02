@@ -12,6 +12,8 @@ services:
       - ./app:/app
     ports:
       - "8000:8000"
+    env_file:
+      - ./app/aws_env_creds
 
   worker:
     build: worker/
@@ -25,8 +27,6 @@ services:
     # mem_limit: 1024m
     # cpus: 0.6
     # pids_limit: 400
-    env_file:
-      - ./worker/aws_env_creds
 
   flower:
     image: mher/flower

@@ -1,7 +1,8 @@
 import os
 import botocore
-import boto3
 import logging
+
+from boto3 import client
 
 logging.basicConfig(level=logging.INFO)
 
@@ -24,7 +25,7 @@ class S3CodeReader:
         @return the test file content
         """
 
-        s3 = boto3.client(
+        s3 = client(
             's3',
             aws_access_key_id=cls.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=cls.AWS_SECRET_ACCESS_KEY
@@ -40,6 +41,3 @@ class S3CodeReader:
         except botocore.exceptions.ClientError as err:
             logging.error(f"Error gathering the file, err: {err}")
             raise err
-        except botocore.errorfactory.NoSuchKey as nsk:
-            logging.error(f"Error, no key existent, key: {s3_test_file_key}")
-            raise nsk

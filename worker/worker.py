@@ -78,5 +78,5 @@ def execute_code(language: str, code: str, timeout: Optional[float] = 10) -> dic
 
 
 @celery_app.task
-def evaluate_submission(language: str, code: str, s3_test_code_uri: str) -> dict:
+def evaluate_submission(language: str, user_code: str, test_code: str, number_of_testcases: str) -> dict:
     pass

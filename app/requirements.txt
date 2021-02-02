@@ -47,3 +47,4 @@ asgi-lifespan==1.0.1
 coverage==5.4
 requests
 pytest-mock
+boto3
