@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 def test_WHEN_execution_working_THEN_return(client: TestClient,
                                             execution: schemas.Execution,
                                             mocker,
-                                            mock_send_task_no_error):
+                                            mock_send_task_no_error: callable):
     """
     Function for testing the execution post call when the call is done correctly
     """
@@ -21,10 +21,10 @@ def test_WHEN_execution_working_THEN_return(client: TestClient,
     assert "Hello World" in res.text
 
 
-def testWHEN_execution_fails_THEN_raise(client: TestClient,
-                                        execution: schemas.Execution,
-                                        mocker,
-                                        mock_send_task_raise):
+def test_WHEN_execution_fails_THEN_raise(client: TestClient,
+                                         execution: schemas.Execution,
+                                         mocker,
+                                         mock_send_task_raise: callable):
     """
     Function for testing the execution post call when the celery worker cannot process the execution
     """

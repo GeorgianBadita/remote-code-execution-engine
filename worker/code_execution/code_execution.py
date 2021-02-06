@@ -2,6 +2,7 @@ import logging
 import subprocess
 import os
 
+from code_execution.code_execution_commands import get_exec_command_python,  get_exec_command_cpp
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -31,7 +32,10 @@ class CodeExcution:
             raise err
 
     @staticmethod
-    def provide_code_execution_command(in_file_path: str, language: str, compiled_file_path: str) -> str:
+    def provide_code_execution_command(in_file_path: str,
+                                       language: str,
+                                       compiled_file_path: str,
+                                       submission: bool = False) -> str:
         """
         Function which provides the bash command which needs to be run in order
         to execute the code
@@ -39,6 +43,8 @@ class CodeExcution:
         @param in_file_path: path to the file where the command should be run
         @param language: the language in which the file should be compiled/interpreted
         @param compiled_file_path: path where temporary compiled files will be kept
+        @param submission: flag which indicates which execution command should be provided
+        based on if the execution is a submission or not
 
         @return: the command which just needs to be run in order to get the output of the code
         @throw: KeyError if the language is not supported
@@ -47,10 +53,13 @@ class CodeExcution:
         try:
             logging.info(f"Started creating code exec command for {language}, and file: {in_file_path}")
             if language == "python":
-                return f'{supported_langs[language]["cmd"]} {in_file_path}'
+                return get_exec_command_python(supported_langs[language]["cmd"], in_file_path)
             elif language == "cpp":
-                return (f"{supported_langs[language]['cmd']} -o {compiled_file_path} {in_file_path}"
-                        f" && ./{'/'.join(compiled_file_path.split('/')[2:])}")
+                return get_exec_command_cpp(supported_langs[language]["cmd"],
+                                            compiled_file_path,
+                                            in_file_path,
+                                            submission)
+
             else:
                 raise KeyError("Language key not found")
         except KeyError as err:
@@ -59,7 +68,7 @@ class CodeExcution:
             )
             raise err
 
-    @staticmethod
+    @ staticmethod
     def execute_code(command: str,
                      in_file_path: str,
                      compiled_file_path: str,
@@ -104,10 +113,10 @@ class CodeExcution:
                 logging.info(f"Err: {err}")
                 logging.info(f"RetCode: {rc}")
 
-                if err or rc != 0:
+                if rc != 0:
                     raise subprocess.CalledProcessError(rc, command, err)
 
-                return out
+                return out if out else err
 
         except IOError as ioe:
             logging.error(
@@ -134,7 +143,7 @@ class CodeExcution:
         finally:
             CodeExcution.__clear_resources(in_file_path, compiled_file_path)
 
-    @staticmethod
+    @ staticmethod
     def __clear_resources(*args) -> None:
         """
         Function for deleting resources after code execution

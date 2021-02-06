@@ -1,3 +1,4 @@
+import re
 import logging
 
 from typing import List
@@ -18,21 +19,25 @@ def python_submission_code_injector(user_code: str, test_code: str) -> str:
 
     logging.info("Start injecting user code")
 
-    line_split: List[str] = test_code.split('\n')
-    last_import_pos: int = 0
-
-    for i in range(len(line_split)):
-        if line_split[i].startswith("import"):
-            last_import_pos = i
-
     try:
+
+        if not re.search(".*class.*Test.*", test_code):
+            raise ValueError("Test code does not contain a class named Test<<ProblemName>>")
+
+        line_split: List[str] = test_code.split('\n')
+        last_import_pos: int = 0
+
+        for i in range(len(line_split)):
+            if line_split[i].startswith("import"):
+                last_import_pos = i
+
         final_code = '\n'.join(['\n'] + line_split[:last_import_pos + 1] + ['\n#===========USER CODE START===========',
                                                                             user_code,
                                                                             '\n#===========USER CODE END==========='] +
                                line_split[last_import_pos + 1:])
-    except IndexError:
-        logging.error(f"Erorr while composing python code when injecting: {user_code}, {test_code}")
-        raise ValueError("Invalid code format for python testing")
+    except (ValueError, IndexError) as e:
+        logging.error(f"Error while composing python code when injecting: {user_code}, {test_code}")
+        raise ValueError(f"Invalid code format for python testing, err: {str(e)}")
 
     logging.info(f"Successfully injected code, {user_code}, {test_code}")
     return final_code

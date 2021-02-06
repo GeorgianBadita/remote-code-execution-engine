@@ -25,12 +25,13 @@ logger = get_logger(__name__)
 
 
 @celery_app.task
-def execute_code(language: str, code: str, timeout: Optional[float] = 10) -> dict:
+def execute_code(language: str, code: str, submission: bool = False, timeout: Optional[float] = 10) -> dict:
     """
     Task for code execution
 
     @param language: code programming language
     @param code: code to be executed
+    @param submission: flag which tells if the code to be executed is a submission or a normal execution
     @param timeout: maximum time the code is allowed to run
 
     @return: dict containgin execution results
@@ -44,7 +45,7 @@ def execute_code(language: str, code: str, timeout: Optional[float] = 10) -> dic
     compiled_file = f'{compiled_dir_path}/{generate_random_file()}.out'
 
     command_to_execute_code = CodeExcution.provide_code_execution_command(
-        in_file_path, language, compiled_file)
+        in_file_path, language, compiled_file, submission)
 
     default_dict = {
         "has_error": False,
@@ -75,8 +76,3 @@ def execute_code(language: str, code: str, timeout: Optional[float] = 10) -> dic
         default_dict["raw_output"] = "Time Limit Exceeded"
 
     return default_dict
-
-
-@celery_app.task
-def evaluate_submission(language: str, user_code: str, test_code: str, number_of_testcases: str) -> dict:
-    pass

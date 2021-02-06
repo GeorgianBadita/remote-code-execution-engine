@@ -1,7 +1,7 @@
 import logging
 
-from code_execution.code_execution import supported_langs
-from submission_helper.code_injectors import python_submission_code_injector
+
+from remote_coding_compilation_engine.submission_helper.code_injectors import python_submission_code_injector
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -11,8 +11,10 @@ class SubmissionHelper:
     Helper class for submission evaluation
     """
 
-    @staticmethod
-    def compose_submission_code(user_code: str, test_code: str, language: str) -> str:
+    __supported_langs = set(["python", "cpp"])
+
+    @classmethod
+    def compose_submission_code(cls, user_code: str, test_code: str, language: str) -> str:
         """
         Function which injects the user's code into test code
 
@@ -25,7 +27,7 @@ class SubmissionHelper:
         """
 
         try:
-            if language not in supported_langs:
+            if language not in cls.__supported_langs:
                 raise KeyError(language)
 
             logging.info(f"Start injecting code with, injector for {language}")

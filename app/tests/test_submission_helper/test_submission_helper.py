@@ -1,9 +1,10 @@
 import pytest
 
-from submission_helper.submission_helper import SubmissionHelper
+
+from remote_coding_compilation_engine.submission_helper.code_submission_helper import SubmissionHelper
 
 
-def test_WHEN_test_code_format_is_corrent_THEN_compose_submission_code_returns(
+def test_WHEN_test_code_format_is_correct_THEN_compose_submission_code_returns(
     two_sum_answer_py: str,
     two_sum_test_code_py: str
 ):
@@ -17,7 +18,7 @@ def test_WHEN_test_code_format_is_corrent_THEN_compose_submission_code_returns(
     assert "USER CODE END" in final_code
 
 
-def test_WHEN_test_code_format_is_incorrect_THEN_compose_submission_code_raise(
+def test_WHEN_test_code_language_is_not_supported_THEN_compose_submission_code_raise(
     two_sum_answer_py: str,
     two_sum_test_code_py: str
 ):
