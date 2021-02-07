@@ -1,7 +1,6 @@
 import pytest
 
-
-from remote_coding_compilation_engine.submission_helper.code_submission_helper import SubmissionHelper
+from remote_code_execution_engine.submission_helper.code_submission_helper import SubmissionHelper
 
 
 def test_WHEN_test_code_format_is_correct_THEN_compose_submission_code_returns(

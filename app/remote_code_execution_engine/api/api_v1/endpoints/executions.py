@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.logger import logger
 
-from remote_coding_compilation_engine import schemas
-from remote_coding_compilation_engine.celery.celery_client import celery_client
+from remote_code_execution_engine import schemas
+from remote_code_execution_engine.celery.celery_client import celery_client
 
 router = APIRouter()
 

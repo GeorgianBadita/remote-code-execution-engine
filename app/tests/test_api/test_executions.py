@@ -1,4 +1,4 @@
-from remote_coding_compilation_engine import schemas
+from remote_code_execution_engine import schemas
 
 from fastapi.testclient import TestClient
 
@@ -12,7 +12,7 @@ def test_WHEN_execution_working_THEN_return(client: TestClient,
     """
 
     mocker.patch(
-        'remote_coding_compilation_engine.api.api_v1.endpoints.executions.celery_client.send_task',
+        'remote_code_execution_engine.api.api_v1.endpoints.executions.celery_client.send_task',
         mock_send_task_no_error
     )
     res = client.post('/api/v1/executions/', json=execution)
@@ -30,7 +30,7 @@ def test_WHEN_execution_fails_THEN_raise(client: TestClient,
     """
 
     mocker.patch(
-        'remote_coding_compilation_engine.api.api_v1.endpoints.executions.celery_client.send_task',
+        'remote_code_execution_engine.api.api_v1.endpoints.executions.celery_client.send_task',
         mock_send_task_raise
     )
     res = client.post('/api/v1/executions/', json=execution)

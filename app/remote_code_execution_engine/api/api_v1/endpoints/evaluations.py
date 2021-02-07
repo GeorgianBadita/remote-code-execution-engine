@@ -3,14 +3,14 @@ import uuid
 from fastapi import APIRouter, HTTPException
 from fastapi.logger import logger
 
-from remote_coding_compilation_engine import schemas
-from remote_coding_compilation_engine.celery.celery_client import celery_client
-from remote_coding_compilation_engine.submission_helper.result_extractors import python_result_extractor
+from remote_code_execution_engine import schemas
+from remote_code_execution_engine.celery.celery_client import celery_client
+from remote_code_execution_engine.submission_helper.result_extractors import python_result_extractor
 
 router = APIRouter()
 
 
-@router.post("/", response_model=schemas.SubmissionResult)
+@router.post("/", response_model=schemas.EvaluationResult)
 def create_submission(execution: schemas.Execution):
     try:
         logger.debug(f"Start code submission request with payload: {execution}")

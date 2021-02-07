@@ -1,6 +1,6 @@
 import pytest
 
-from remote_coding_compilation_engine.submission_helper.result_extractors import python_result_extractor
+from remote_code_execution_engine.submission_helper.result_extractors import python_result_extractor
 
 
 def test_WHEN_all_py_tests_passed_THEN_result_extractor_returns_all_true(

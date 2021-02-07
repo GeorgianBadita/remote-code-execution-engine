@@ -4,7 +4,7 @@ from typing import List
 from pydantic import BaseModel
 
 
-class SubmissionResult(BaseModel):
+class EvaluationResult(BaseModel):
     submission_id: str
     has_error: bool
     results: List[bool]

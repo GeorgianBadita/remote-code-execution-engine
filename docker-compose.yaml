@@ -7,7 +7,7 @@ services:
       - "5672:5672"
   api:
     build: app/
-    command: uvicorn remote_coding_compilation_engine.main:app --host 0.0.0.0 --reload
+    command: uvicorn remote_code_execution_engine.main:app --host 0.0.0.0 --reload
     volumes:
       - ./app:/app
     ports:

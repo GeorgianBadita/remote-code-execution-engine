@@ -1,5 +1,6 @@
 import pytest
-from remote_coding_compilation_engine.submission_helper.code_injectors import python_submission_code_injector
+
+from remote_code_execution_engine.submission_helper.code_injectors import python_submission_code_injector
 
 
 def test_WHEN_PYTHIN_test_code_format_is_correct_THEN_code_injection_returns(

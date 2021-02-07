@@ -1,7 +1,7 @@
 import logging
 
 
-from remote_coding_compilation_engine.submission_helper.code_injectors import python_submission_code_injector
+from remote_code_execution_engine.submission_helper.code_injectors import python_submission_code_injector
 
 logging.basicConfig(level=logging.DEBUG)
 

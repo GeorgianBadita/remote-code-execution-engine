@@ -3,7 +3,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from remote_coding_compilation_engine import schemas
+from remote_code_execution_engine import schemas
 
 
 @pytest.fixture
@@ -11,7 +11,7 @@ def app() -> FastAPI:
     """
     Fixture for new testing application
     """
-    from remote_coding_compilation_engine.main import app
+    from remote_code_execution_engine.main import app
     return app
 
 

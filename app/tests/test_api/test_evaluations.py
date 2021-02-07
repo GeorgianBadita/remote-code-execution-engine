@@ -1,4 +1,4 @@
-from remote_coding_compilation_engine import schemas
+from remote_code_execution_engine import schemas
 
 from fastapi.testclient import TestClient
 
@@ -12,10 +12,10 @@ def test_WHEN_submission_works_THEN_return(client: TestClient,
     """
 
     mocker.patch(
-        'remote_coding_compilation_engine.api.api_v1.endpoints.submissions.celery_client.send_task',
+        'remote_code_execution_engine.api.api_v1.endpoints.evaluations.celery_client.send_task',
         mock_send_task_no_error_submission
     )
-    res = client.post('/api/v1/submissions/', json=execution)
+    res = client.post('/api/v1/evaluations/', json=execution)
 
     assert res.status_code == 200
 
@@ -29,11 +29,11 @@ def test_WHEN_submission_fails_THEN_raise(client: TestClient,
     """
 
     mocker.patch(
-        'remote_coding_compilation_engine.api.api_v1.endpoints.submissions.celery_client.send_task',
+        'remote_code_execution_engine.api.api_v1.endpoints.evaluations.celery_client.send_task',
         mock_send_task_raise
     )
 
-    res = client.post('/api/v1/submissions/', json=execution)
+    res = client.post('/api/v1/evaluations/', json=execution)
 
     assert res.status_code == 500
     assert "could not process the code execution" in res.text
@@ -48,10 +48,10 @@ def test_WHEN_test_code_is_not_properly_formatted_THEN_raise(client: TestClient,
     """
 
     mocker.patch(
-        'remote_coding_compilation_engine.api.api_v1.endpoints.submissions.celery_client.send_task',
+        'remote_code_execution_engine.api.api_v1.endpoints.evaluations.celery_client.send_task',
         mock_send_task_no_error
     )
 
-    res = client.post('/api/v1/submissions/', json=execution)
+    res = client.post('/api/v1/evaluations/', json=execution)
 
     assert res.status_code == 400

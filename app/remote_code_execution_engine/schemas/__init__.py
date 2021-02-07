@@ -1,2 +1,2 @@
-from .submission import SubmissionResult
+from .evaluation import EvaluationResult
 from .execution import Execution, ExecutionResult
